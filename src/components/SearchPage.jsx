@@ -16,6 +16,11 @@ const SearchBarCon = styled.div`
   font-size: 33px;
 `;
 
+const PageCon = styled.div`
+  margin-right: 10px;
+  margin-left: 30px;
+`
+
 const TextBox = styled.input`
   font-size: 33px;
 `;
@@ -69,7 +74,7 @@ function SearchPage(props) {
   }, [data, favIds]);
 
   return (
-    <div>
+    <PageCon>
       {search === undefined && (
         <SearchBarCon>
           <label htmlFor="search">Search: </label>
@@ -80,7 +85,7 @@ function SearchPage(props) {
             placeholder="Search for a gif"
             onChange={(e) => setTypedSearch(e.target.value)}
           />
-          <button onClick={submitSearch}>Submit</button>
+          <button htmlFor='search' onClick={submitSearch}>Submit</button>
         </SearchBarCon>
       )}
 
@@ -95,7 +100,7 @@ function SearchPage(props) {
               placeholder="Search for a gif"
               onChange={(e) => setTypedSearch(e.target.value)}
             />
-            <button onClick={submitSearch}>Submit</button>
+            <button htmlFor='search' onClick={submitSearch}>Submit</button>
           </SmallSearchBarCon>
           <Masonry
             breakpointCols={{ default: 4, 800: 2 }}
@@ -106,7 +111,7 @@ function SearchPage(props) {
           </Masonry>
         </>
       )}
-    </div>
+    </PageCon>
   );
 }
 

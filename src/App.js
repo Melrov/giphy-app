@@ -10,42 +10,59 @@ import Favorites from "./components/Favorites";
 function App() {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(null);
-  const [favs, setFavs] = useState([])
+  const [favs, setFavs] = useState([]);
 
-  const toggleFav = useCallback((gif) => {
-    let index = favs.indexOf(gif)
-    if(index === -1){
-      setFavs((curr) => [...curr, gif])
-    }
-    else{
-      setFavs((curr) => [...curr.slice(0, index), ...curr.slice(index+1)] )
-    }
-    console.log(favs)
-  }, [favs]);
+  const toggleFav = useCallback(
+    (gif) => {
+      let index = favs.indexOf(gif);
+      if (index === -1) {
+        setFavs((curr) => [...curr, gif]);
+      } else {
+        setFavs((curr) => [...curr.slice(0, index), ...curr.slice(index + 1)]);
+      }
+      console.log(favs);
+    },
+    [favs]
+  );
 
   useEffect(() => {
-    if(user === null){
-        setLoggedIn(false)
+    if (user === null) {
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
     }
-    else{
-      setLoggedIn(true)
-    }
-}, [user])
+  }, [user]);
 
-  console.log(favs)
+  console.log(favs);
   return (
     <div className="App">
       <Router>
-      <Menu loggedIn={loggedIn}/>
+        <Menu loggedIn={loggedIn} user={user} />
         <Routes>
           <Route
             exact
             path="/"
-            element={ loggedIn ? <SearchPage favs={favs} toggleFav={toggleFav} /> : <LoginPage setUser={setUser}/>}
+            element={
+              loggedIn ? (
+                <SearchPage favs={favs} toggleFav={toggleFav} />
+              ) : (
+                <LoginPage setUser={setUser} />
+              )
+            }
           />
-          <Route path="/login" protected={true} element={<LoginPage setUser={setUser} />} />
-          <Route path="/search/:search" element={<SearchPage  favs={favs} toggleFav={toggleFav} />} />
-          <Route path="/favorites" element={<Favorites favs={favs} toggleFav={toggleFav} />} />
+          <Route
+            path="/login"
+            protected={true}
+            element={<LoginPage setUser={setUser} />}
+          />
+          <Route
+            path="/search/:search"
+            element={<SearchPage favs={favs} toggleFav={toggleFav} />}
+          />
+          <Route
+            path="/favorites"
+            element={<Favorites favs={favs} toggleFav={toggleFav} />}
+          />
         </Routes>
       </Router>
     </div>

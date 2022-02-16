@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "./hooks/useFetch";
 
@@ -9,19 +9,19 @@ function LoginPage(props) {
   const [password, setPassword] = useState("");
   let navigate = useNavigate();
 
-  function isValid(text) {
+  const isValid = useCallback((text) => {
     if (text.length < 4 || text.length > 20) {
       return false;
     }
     return true;
-  }
+  }, [])
 
-  function submitButton(e) {
+  const submitButton = useCallback((e) => {
     if (isValid(userName) && isValid(password)) {
       setUser(userName);
       navigate("/");
     }
-  }
+  }, [userName, password])
 
   return (
     <div>

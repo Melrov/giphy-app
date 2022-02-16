@@ -25,8 +25,11 @@ const ListItem = styled.li`
   padding-right: 20px;
 `;
 
-function Menu(props) {
-  const { loggedIn } = props;
+const User = styled.div`
+  color: white
+`
+
+function Menu({ loggedIn, user}) {
   return (
     <Back>
       <MenuCon>
@@ -52,7 +55,7 @@ function Menu(props) {
             )}
           </ListItem>
         </List>
-        <div>hello</div>
+        { loggedIn && <User>hello {user}</User> }
       </MenuCon>
     </Back>
   );
