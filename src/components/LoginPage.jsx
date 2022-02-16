@@ -3,28 +3,25 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "./hooks/useFetch";
 
 function LoginPage(props) {
-    const { setUser } = props
+  console.log('LoginPage')
+  const { setUser } = props;
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   let navigate = useNavigate();
-  
-  const { data, error, loading } = useFetch("cheeseburger");
-  console.log(data, error, loading);
 
-
-    function isValid(text){
-        if(text.length < 4 || text.length > 20){
-            return false
-        }
-        return true
+  function isValid(text) {
+    if (text.length < 4 || text.length > 20) {
+      return false;
     }
+    return true;
+  }
 
-    function submitButton(e){
-        if(isValid(userName) && isValid(password)){
-            setUser(userName)
-            navigate('/')
-        }
+  function submitButton(e) {
+    if (isValid(userName) && isValid(password)) {
+      setUser(userName);
+      navigate("/");
     }
+  }
 
   return (
     <div>
@@ -43,7 +40,9 @@ function LoginPage(props) {
         name="password"
         placeholder="Password"
       />
-      <button type="submit" onClick={submitButton}>Submit</button>
+      <button type="submit" onClick={submitButton}>
+        Submit
+      </button>
     </div>
   );
 }
