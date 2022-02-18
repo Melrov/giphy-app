@@ -1,27 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { GifContext } from "./context/GifContext";
+import { UserContext } from "./context/UserContext";
 import useFetch from "./hooks/useFetch";
 
 function LoginPage(props) {
-  console.log('LoginPage')
-  const { setUser } = props;
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  let navigate = useNavigate();
-
-  const isValid = useCallback((text) => {
-    if (text.length < 4 || text.length > 20) {
-      return false;
-    }
-    return true;
-  }, [])
-
-  const submitButton = useCallback((e) => {
-    if (isValid(userName) && isValid(password)) {
-      setUser(userName);
-      navigate("/");
-    }
-  }, [userName, password])
+  const {
+    userName,
+    setUserName,
+    password,
+    setPassword,
+    login,
+    uError,
+    pError,
+  } = useContext(UserContext);
 
   return (
     <div>
@@ -35,13 +27,14 @@ function LoginPage(props) {
       />
       <label htmlFor="password">Password</label>
       <input
+        value={password}
         onChange={(e) => setPassword(e.target.value)}
         type="password"
         name="password"
         placeholder="Password"
       />
-      <button type="submit" onClick={submitButton}>
-        Submit
+      <button type="submit" onClick={login}>
+        Login
       </button>
     </div>
   );

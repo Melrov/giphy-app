@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { GifContext } from "./context/GifContext";
+import { UserContext } from "./context/UserContext";
 import "./Menu.css";
 
 const Back = styled.div`
@@ -26,10 +28,15 @@ const ListItem = styled.li`
 `;
 
 const User = styled.div`
-  color: white
+  color: white;
+  padding-right: 10px
+`
+const UserCon = styled.div`
+  display: flex;
 `
 
-function Menu({ loggedIn, user}) {
+function Menu() {
+  const { user, logout } = useContext(UserContext)
   return (
     <Back>
       <MenuCon>
@@ -43,7 +50,7 @@ function Menu({ loggedIn, user}) {
             </NavLink>
           </ListItem>
           <ListItem>
-            {loggedIn && (
+            {user && (
               <NavLink
                 to="/favorites"
                 className={({ isActive }) =>
@@ -55,7 +62,10 @@ function Menu({ loggedIn, user}) {
             )}
           </ListItem>
         </List>
-        { loggedIn && <User>hello {user}</User> }
+        { user && <UserCon>
+          <User>hello {user}</User>
+          <button onClick={logout}>Logout</button>
+        </UserCon> }
       </MenuCon>
     </Back>
   );

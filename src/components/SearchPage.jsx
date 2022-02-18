@@ -1,8 +1,9 @@
 //import Masonry from "masonry-layout";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import Masonry from "react-masonry-css";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { GifContext } from "./context/GifContext";
 import GifDisplay from "./GifDisplay";
 import useFetch from "./hooks/useFetch";
 import "./SearchPage.css";
@@ -13,16 +14,23 @@ const SearchBarCon = styled.div`
   justify-content: center;
   align-items: center;
   height: 75vh;
-  font-size: 33px;
+  font-size: 33px !important;
+}
+
 `;
 
 const PageCon = styled.div`
   margin-right: 10px;
   margin-left: 30px;
-`
+`;
 
 const TextBox = styled.input`
   font-size: 33px;
+  &:-webkit-autofill::first-line {
+  font-size: 24px;
+  backgroundColor: black;
+}
+  
 `;
 
 const SmallSearchBarCon = styled.div`
@@ -34,48 +42,44 @@ const SmallSearchBarCon = styled.div`
 
 function SearchPage(props) {
   console.log("searchPage");
-  const { favs, toggleFav } = props;
-  const { search } = useParams();
-  //console.log(search);
-  const { data, error, loading } = useFetch(search);
-  const [typedSearch, setTypedSearch] = useState("");
-  let navigate = useNavigate();
+  const {
+    toggleFav,
+    search,
+    setSearch,
+    typedSearch,
+    setTypedSearch,
+    data,
+    loading,
+    isFav,
+  } = useContext(GifContext);
 
-  const favIds = useMemo(() => favs.map((fav) => fav.id), [favs]);
+  const { urlSearch } = useParams();
+
+
+  useEffect(() => {
+    if (urlSearch) {
+      setSearch(urlSearch);
+    } else {
+      setSearch("");
+    }
+  }, [urlSearch])
+
+
+  //const [typedSearch, setTypedSearch] = useState("");
+  let navigate = useNavigate();
 
   const submitSearch = useCallback(
     (e) => {
+      //setSearch(typedSearch);
       navigate("/search/" + typedSearch);
+      setTypedSearch("");
     },
     [typedSearch]
   );
 
-  const isFav = useCallback(
-    (id) => {
-      if (favIds.indexOf(id) !== -1) return true;
-      return false;
-    },
-    [favIds]
-  );
-
-  let items = useMemo(() => {
-    if (data) {
-      return data.map((gif) => {
-        return (
-          <GifDisplay
-            key={gif.id}
-            gif={gif}
-            isFav={isFav(gif.id)}
-            toggleFav={toggleFav}
-          />
-        );
-      });
-    }
-  }, [data, favIds]);
-
   return (
     <PageCon>
-      {search === undefined && (
+      {!urlSearch && (
         <SearchBarCon>
           <label htmlFor="search">Search: </label>
           <TextBox
@@ -85,7 +89,9 @@ function SearchPage(props) {
             placeholder="Search for a gif"
             onChange={(e) => setTypedSearch(e.target.value)}
           />
-          <button htmlFor='search' onClick={submitSearch}>Submit</button>
+          <button htmlFor="search" onClick={submitSearch}>
+            Submit
+          </button>
         </SearchBarCon>
       )}
 
@@ -100,14 +106,26 @@ function SearchPage(props) {
               placeholder="Search for a gif"
               onChange={(e) => setTypedSearch(e.target.value)}
             />
-            <button htmlFor='search' onClick={submitSearch}>Submit</button>
+            <button htmlFor="search" onClick={submitSearch}>
+              Submit
+            </button>
           </SmallSearchBarCon>
           <Masonry
             breakpointCols={{ default: 4, 800: 2 }}
             className="my-masonry-grid"
             columnClassName="my-masonry-grid_column"
           >
-            {items}
+            {data &&
+              data.map((gif) => {
+                return (
+                  <GifDisplay
+                    key={gif.id}
+                    gif={gif}
+                    isFav={isFav(gif.id)}
+                    toggleFav={toggleFav}
+                  />
+                );
+              })}
           </Masonry>
         </>
       )}

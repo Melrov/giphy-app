@@ -12,6 +12,8 @@ let FavBtn = styled.span`
   ${"" /* border-radius: 15px; */}
   box-shadow: 0px 0px 19px 5px black;
   color: white;
+  background-color: black;
+  border-radius: 10px;
 `;
 
 let GifCon = styled.div`

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import Masonry from "react-masonry-css";
 import styled from "styled-components";
+import { GifContext } from "./context/GifContext";
 import GifDisplay from "./GifDisplay";
 
 const GifImg = styled.img`
@@ -12,8 +13,8 @@ const PageCon = styled.div`
   margin-left: 30px;
 `;
 
-function Favorites(props) {
-  const { favs, toggleFav } = props;
+function Favorites() {
+  const { favs, toggleFav } = useContext(GifContext)
 
   let items = favs.map((gif) => {
     return (
