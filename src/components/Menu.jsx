@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { GifContext } from "./context/GifContext";
-import { UserContext } from "./context/UserContext";
+import { GifContext } from "../context/GifContext";
+import { UserContext } from "../context/UserContext";
 import "./Menu.css";
 
 const Back = styled.div`

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Masonry from "react-masonry-css";
 import styled from "styled-components";
-import { GifContext } from "./context/GifContext";
+import { GifContext } from "../context/GifContext";
 import GifDisplay from "./GifDisplay";
 
 const GifImg = styled.img`

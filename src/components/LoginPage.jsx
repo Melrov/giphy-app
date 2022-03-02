@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GifContext } from "./context/GifContext";
-import { UserContext } from "./context/UserContext";
+import { GifContext } from "../context/GifContext";
+import { UserContext } from "../context/UserContext";
 import useFetch from "./hooks/useFetch";
 
 function LoginPage(props) {

@@ -3,15 +3,14 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import GifProvider from "./components/context/GifContext";
-import UserProvider from "./components/context/UserContext";
+import GifProvider from "./context/GifContext";
+import UserProvider from "./context/UserContext";
+import { Provider } from "react-redux";
 
 ReactDOM.render(
-    <GifProvider>
-  <UserProvider>
-      <App />
-  </UserProvider>
-    </GifProvider>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById("root")
 );
 

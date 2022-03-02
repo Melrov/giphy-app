@@ -3,9 +3,9 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from "re
 import Masonry from "react-masonry-css";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { GifContext } from "./context/GifContext";
+import { GifContext } from "../context/GifContext";
 import GifDisplay from "./GifDisplay";
-import useFetch from "./hooks/useFetch";
+import useFetch from "../hooks/useFetch";
 import "./SearchPage.css";
 
 const SearchBarCon = styled.div`

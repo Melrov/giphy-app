@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
-import { GifContext } from './context/GifContext'
-import { UserContext } from './context/UserContext'
+import { GifContext } from '../context/GifContext'
+import { UserContext } from '../context/UserContext'
 import LoginPage from './LoginPage'
 
 function ProtectedRoutes({ isPrivate, children }) {
