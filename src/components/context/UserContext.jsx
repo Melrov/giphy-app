@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import useFetch from "../hooks/useFetch";
 import { GifContext } from "./GifContext";
 export const UserContext = createContext(null);
 
@@ -16,6 +17,11 @@ export default function UserProvider(props) {
   const [password, setPassword] = useState("");
   const [uError, setUError] = useState(null);
   const [pError, setPError] = useState(null);
+  const { data, error, loading } = useFetch(
+    "get",
+    "https://localhost/api/user/login",
+    {}
+  );
 
   //let navigate = useNavigate();
 
@@ -35,8 +41,17 @@ export default function UserProvider(props) {
     [userName, password]
   );
 
-  const login = useCallback(() => {
+  const login = useCallback(async () => {
     if (!uError && !pError) {
+      const res = await fetch("/api/users/login", {
+        method: "POST",
+        body: JSON.stringify({ username: userName, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await res.json();
+      console.log(json);
       setUser(userName);
       setUserName("");
       setPassword("");

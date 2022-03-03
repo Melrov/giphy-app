@@ -3,15 +3,16 @@ const util = require("util");
 
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: DB_HOST,
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: DB_DATABASE,
-  port: DB_PORT,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT,
 });
 
 pool.getConnection((err, connection) => {
   if (err) {
+    console.log(err.code);
     if (err.code === "PROTOCOL_CONNECTION_LOST") {
       console.error("Database connection was closed.");
     }

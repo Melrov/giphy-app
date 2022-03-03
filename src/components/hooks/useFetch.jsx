@@ -23,7 +23,6 @@ export default function useFetch(search) {
       }
       //console.log(baseUrl + search);
       console.log('api call')
-      
       const response = await fetch(`${baseUrl}&offset=${offset}&q=${search}`);
       //console.log(response)
       const json = await response.json();

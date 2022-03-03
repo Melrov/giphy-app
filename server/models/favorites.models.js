@@ -1,5 +1,11 @@
 const query = require("../config/mysql.config");
 
+/**
+ *
+ * @param {*} res result of the query
+ * @param {*} gif object that has gif_id, url, title, uid
+ * @returns sends a result back
+ */
 async function addFavorite(res, gif) {
   try {
     const { insertId } = await query("INSERT INTO favorites SET ?", [gif]);
@@ -13,6 +19,12 @@ async function addFavorite(res, gif) {
   }
 }
 
+/**
+ *
+ * @param {res} res result of the query
+ * @param {int} id id of the favorite you want to remove
+ * @returns sends a result back
+ */
 async function removeFavorite(res, id) {
   try {
     await query(`DELETE FROM favorites WHERE favorites.id = ?`, [id]);
@@ -26,6 +38,12 @@ async function removeFavorite(res, id) {
   }
 }
 
+/**
+ *
+ * @param {res} res result of the query
+ * @param {*} userId user id of the user you want to query
+ * @returns sends a result back
+ */
 async function getByUserId(res, userId) {
   try {
     const data = await query(
@@ -42,4 +60,4 @@ async function getByUserId(res, userId) {
   }
 }
 
-module.exports = { addFavorite, removeFavorite, getByUserId }
+module.exports = { addFavorite, removeFavorite, getByUserId };
