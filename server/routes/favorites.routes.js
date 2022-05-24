@@ -1,29 +1,39 @@
-const express = require("express");
-const {
-  addFavorite,
-  removeFavorite,
-  getByUserId,
-} = require("../models/favorites.models");
-const router = express.Router();
+const { addFavorite, removeFavorite, getByUserId } = require("../models/favorites.models");
+const Joi = require("joi");
 
-router.get("/:user_id", (req, res, next) => {
-  getByUserId(res, req.params.user_id);
-});
-
-router.put("/upload", (req, res) => {
-  const { gif_id, title, url, uid } = req.body;
-  if (!gif_id || !title || !url || !uid) {
-    return res.send({
-      success: false,
-      data: null,
-      error: "Invalid format please provide a gif_id, title, url, and uid",
-    });
-  }
-  addFavorite(res, { gif_id, title, url, uid });
-});
-
-router.delete("/remove/:id", (req, res) => {
-  removeFavorite(res, req.params.id);
-});
-
-module.exports = router;
+exports.configureFavoritesRoutes = (server) => {
+  return server.route([
+    {
+      method: "GET",
+      path: "/api/favorites/{user_id}",
+      handler: function (request, h) {
+        return getByUserId(request.params.user_id);
+      },
+    },
+    {
+      method: "PUT",
+      path: "/api/favorites/upload",
+      handler: function (request, h) {
+        const { gif_id, title, url, uid } = request.payload;
+        return addFavorite({ gif_id, title, url, uid });
+      },
+      options: {
+        validate: {
+          payload: Joi.object({
+            gif_id: Joi.string().required(),
+            title: Joi.string().required(),
+            url: Joi.string().required(),
+            uid: Joi.string().required(),
+          }),
+        },
+      },
+    },
+    {
+      method: "DELETE",
+      path: "/api/favorites/remove/{id}",
+      handler: function (request, h) {
+        return removeFavorite(request.params.id);
+      },
+    },
+  ]);
+};

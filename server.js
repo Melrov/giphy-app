@@ -1,23 +1,46 @@
 require("dotenv").config();
-const express = require("express");
-
-const authRoute = require("./server/routes/auth.routes");
-const favoritesRoute = require("./server/routes/favorites.routes");
-
-const app = express();
+const fs = require("fs");
 const SERVER_PORT = process.env.PORT || 8080;
 
-app.use(express.json());
-app.use(express.static(__dirname + "/build"))
+const Hapi = require("@hapi/hapi");
+const Path = require("path");
 
+const { configureAuthRoutes } = require("./server/routes/auth.routes");
+const { configureFavoritesRoutes } = require("./server/routes/favorites.routes");
 
-app.use("/api/favorites", favoritesRoute);
-app.use("/api/auth", authRoute);
+const init = async () => {
+  console.log(Path.join(__dirname, "build"));
+  const server = Hapi.server({
+    port: SERVER_PORT,
+    routes: {
+      files: {
+        relativeTo: Path.join(__dirname, "build"),
+      },
+    },
+  });
+  await server.register(require("@hapi/inert"));
 
-app.get("*", (req, res) => {
-  //return res.send({ success: false });
-  return res.sendFile("/build/index.html", {root: __dirname + "/"})
+  server.route({
+    method: "GET",
+    path: "/{path*}",
+    handler: {
+      directory: {
+        path: ".",
+        redirectToSlash: true,
+        index: true,
+      },
+    },
+  });
+  await configureAuthRoutes(server);
+  await configureFavoritesRoutes(server);
+
+  await server.start();
+  console.log("Example app listening on port %s", server.info.uri);
+};
+
+process.on("unhandledRejection", (err) => {
+  console.log(err);
+  process.exit(1);
 });
-app.listen(SERVER_PORT, () => {
-  console.log(`Example app listening on port ${SERVER_PORT}!`);
-});
+
+init();

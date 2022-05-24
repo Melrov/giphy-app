@@ -1,16 +1,37 @@
-const express = require("express");
 const { login, signup } = require("../models/auth.models");
-const validateInfo = require("../middleware/validateInfo.middleware");
-const router = express.Router();
+const Joi = require("joi");
 
-router.use(validateInfo);
-
-router.post("/login", (req, res) => {
-  login(res, req.body.username, req.body.password);
-});
-
-router.put("/signup", (req, res) => {
-  signup(res, req.body.username, req.body.password);
-});
-
-module.exports = router;
+module.exports.configureAuthRoutes = (server) => {
+  return server.route([
+    {
+      method: "POST",
+      path: "/api/auth/login",
+      handler: function (request, h) {
+        return login(request.payload.username, request.payload.password);
+      },
+      options: {
+        validate: {
+          payload: Joi.object({
+            username: Joi.string().min(4).max(20),
+            password: Joi.string().min(4).max(20),
+          }),
+        },
+      },
+    },
+    {
+      method: "PUT",
+      path: "/api/auth/signup",
+      handler: function (request, h) {
+        return signup(request.payload.username, request.payload.password);
+      },
+      options: {
+        validate: {
+          payload: Joi.object({
+            username: Joi.string().min(4).max(20),
+            password: Joi.string().min(4).max(20),
+          }),
+        },
+      },
+    },
+  ]);
+};
